@@ -1,3 +1,6 @@
+export type Stage = "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED" | "WITHDRAWN";
+export type Priority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+
 export interface User {
   id: string;
   email: string;
@@ -15,8 +18,8 @@ export interface Job {
   description?: string;
   salary?: string;
   url?: string;
-  stage: "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED" | "WITHDRAWN";
-  priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+  stage: Stage;
+  priority: Priority;
   appliedAt: Date;
   updatedAt: Date;
   userId: string;

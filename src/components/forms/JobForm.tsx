@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 interface JobFormProps {
   job?: Job;
   onClose: () => void;
-  onJobCreated?: (job: Job) => void;
+  onJobCreated?: (job: JobFormData) => void;
   onJobUpdated?: (job: Job) => void;
 }
 
@@ -58,7 +58,7 @@ export function JobForm({ job, onClose, onJobCreated, onJobUpdated }: JobFormPro
         if (job && onJobUpdated) {
           onJobUpdated(result);
         } else if (!job && onJobCreated) {
-          onJobCreated(result);
+          onJobCreated(data);
         }
         onClose();
       } else {

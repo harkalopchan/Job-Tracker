@@ -6,15 +6,12 @@ export const jobSchema = z.object({
   location: z.string().optional(),
   description: z.string().optional(),
   salary: z.string().optional(),
-  url: z.string().regex(/^https?:\/\/.+/, "Invalid URL format").optional().or(z.literal("")),
+  url: z.string().optional().or(z.literal("")),
   stage: z.enum(["APPLIED", "INTERVIEW", "OFFER", "REJECTED", "WITHDRAWN"]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
 });
 
-export const jobCreateSchema = jobSchema.extend({
-  appliedAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-});
+export const jobCreateSchema = jobSchema;
 
 export const noteSchema = z.object({
   content: z.string().min(1, "Note content is required"),

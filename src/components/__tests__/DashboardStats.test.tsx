@@ -13,7 +13,7 @@ describe("DashboardStats", () => {
       appliedAt: new Date(),
       updatedAt: new Date(),
       userId: "user1",
-      user: { id: "user1", name: "Test User", email: "test@yourdomain.com", role: "USER" as const, createdAt: new Date(), updatedAt: new Date() },
+      user: { id: "user1", name: "Test User", email: "test@example.com", role: "USER" as const, createdAt: new Date(), updatedAt: new Date() },
       notes: [],
       tags: [],
     },

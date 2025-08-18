@@ -91,7 +91,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 The application comes with pre-seeded demo data:
 
-- **Email**: `demo@example.com`
+- **Admin Email**: `admin@example.com`
+- **User Email**: `demo@example.com`
 - **Password**: `demo123`
 
 ## Project Structure

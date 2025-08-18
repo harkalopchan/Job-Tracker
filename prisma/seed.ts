@@ -5,137 +5,169 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Create demo user
-  const hashedPassword = await bcrypt.hash("demo123", 12);
+  const hashedPassword = await bcrypt.hash("demo123", 10);
   
-  const user = await prisma.user.upsert({
+  const demoUser = await prisma.user.upsert({
     where: { email: "demo@example.com" },
     update: {},
     create: {
       email: "demo@example.com",
       password: hashedPassword,
       name: "Demo User",
-      role: "USER",
+      role: "ADMIN", // Changed to ADMIN for testing
     },
   });
 
-  // Create demo tags
+  // Create demo admin user
+  const adminUser = await prisma.user.upsert({
+    where: { email: "admin@example.com" },
+    update: {},
+    create: {
+      email: "admin@example.com",
+      password: hashedPassword,
+      name: "Admin User",
+      role: "ADMIN",
+    },
+  });
+
+  // Create some sample tags
   const tags = await Promise.all([
-    prisma.tag.upsert({
-      where: { name: "Frontend" },
-      update: {},
-      create: { name: "Frontend", color: "#3B82F6" },
-    }),
-    prisma.tag.upsert({
-      where: { name: "Backend" },
-      update: {},
-      create: { name: "Backend", color: "#10B981" },
-    }),
-    prisma.tag.upsert({
-      where: { name: "Full Stack" },
-      update: {},
-      create: { name: "Full Stack", color: "#8B5CF6" },
-    }),
     prisma.tag.upsert({
       where: { name: "Remote" },
       update: {},
-      create: { name: "Remote", color: "#F59E0B" },
+      create: { name: "Remote", color: "#3B82F6" },
     }),
     prisma.tag.upsert({
-      where: { name: "Senior" },
+      where: { name: "Full-time" },
       update: {},
-      create: { name: "Senior", color: "#EF4444" },
+      create: { name: "Full-time", color: "#10B981" },
+    }),
+    prisma.tag.upsert({
+      where: { name: "Startup" },
+      update: {},
+      create: { name: "Startup", color: "#F59E0B" },
+    }),
+    prisma.tag.upsert({
+      where: { name: "High Salary" },
+      update: {},
+      create: { name: "High Salary", color: "#EF4444" },
     }),
   ]);
 
-  // Create demo jobs
+  // Create sample jobs
   const jobs = await Promise.all([
     prisma.job.create({
       data: {
         title: "Senior Frontend Developer",
-        company: "TechCorp",
+        company: "Tech Corp",
         location: "San Francisco, CA",
         description: "Building modern web applications with React and TypeScript",
-        salary: "$120,000 - $150,000",
+        salary: "$120k - $150k",
         url: "https://techcorp.com/careers",
         stage: "APPLIED",
         priority: "HIGH",
-        userId: user.id,
-        tags: {
-          create: [
-            { tagId: tags[0].id },
-            { tagId: tags[4].id },
-          ],
-        },
+        userId: demoUser.id,
+        appliedAt: new Date(),
+        updatedAt: new Date(),
       },
     }),
     prisma.job.create({
       data: {
-        title: "Backend Engineer",
-        company: "StartupXYZ",
+        title: "Full Stack Engineer",
+        company: "Startup Inc",
         location: "Remote",
-        description: "Building scalable APIs and microservices",
-        salary: "$100,000 - $130,000",
-        url: "https://startupxyz.com/jobs",
+        description: "Join our fast-growing startup and build amazing products",
+        salary: "$90k - $120k",
+        url: "https://startupinc.com/jobs",
         stage: "INTERVIEW",
         priority: "MEDIUM",
-        userId: user.id,
-        tags: {
-          create: [
-            { tagId: tags[1].id },
-            { tagId: tags[3].id },
-          ],
-        },
+        userId: demoUser.id,
+        appliedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+        updatedAt: new Date(),
       },
     }),
     prisma.job.create({
       data: {
-        title: "Full Stack Developer",
-        company: "Enterprise Inc",
+        title: "DevOps Engineer",
+        company: "Enterprise Solutions",
         location: "New York, NY",
-        description: "Working on enterprise applications",
-        salary: "$110,000 - $140,000",
+        description: "Manage cloud infrastructure and deployment pipelines",
+        salary: "$130k - $160k",
         url: "https://enterprise.com/careers",
         stage: "OFFER",
         priority: "URGENT",
-        userId: user.id,
-        tags: {
-          create: [
-            { tagId: tags[2].id },
-          ],
-        },
+        userId: demoUser.id,
+        appliedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // 14 days ago
+        updatedAt: new Date(),
       },
     }),
   ]);
 
-  // Create demo notes
-  await Promise.all([
+  // Create sample notes
+  const notes = await Promise.all([
     prisma.note.create({
       data: {
-        content: "Applied through LinkedIn. Company looks promising with good benefits.",
-        userId: user.id,
+        content: "Applied through LinkedIn. Company seems to have good work-life balance.",
         jobId: jobs[0].id,
+        userId: demoUser.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     }),
     prisma.note.create({
       data: {
-        content: "First interview scheduled for next week. Need to prepare for system design questions.",
-        userId: user.id,
+        content: "First interview scheduled for next week. Need to prepare for React questions.",
         jobId: jobs[1].id,
+        userId: demoUser.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     }),
     prisma.note.create({
       data: {
-        content: "Received offer letter! Negotiating salary and benefits.",
-        userId: user.id,
+        content: "Received offer! Great benefits package and growth opportunities.",
         jobId: jobs[2].id,
+        userId: demoUser.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    }),
+  ]);
+
+  // Associate tags with jobs
+  await Promise.all([
+    prisma.jobTag.create({
+      data: {
+        jobId: jobs[0].id,
+        tagId: tags[0].id, // Remote
+      },
+    }),
+    prisma.jobTag.create({
+      data: {
+        jobId: jobs[0].id,
+        tagId: tags[1].id, // Full-time
+      },
+    }),
+    prisma.jobTag.create({
+      data: {
+        jobId: jobs[1].id,
+        tagId: tags[2].id, // Startup
+      },
+    }),
+    prisma.jobTag.create({
+      data: {
+        jobId: jobs[2].id,
+        tagId: tags[3].id, // High Salary
       },
     }),
   ]);
 
   console.log("Database seeded successfully!");
-  console.log("Demo user:", user.email);
-  console.log("Demo jobs created:", jobs.length);
-  console.log("Demo tags created:", tags.length);
+  console.log("Demo user:", demoUser.email, "(Password: demo123)");
+  console.log("Admin user:", adminUser.email, "(Password: demo123)");
+  console.log("Created", jobs.length, "jobs");
+  console.log("Created", notes.length, "notes");
+  console.log("Created", tags.length, "tags");
 }
 
 main()

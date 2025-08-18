@@ -5,7 +5,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema } from "@/lib/validations";
+import { signInSchema, SignInFormData } from "@/lib/validations";
 import { useToast } from "@/hooks/use-toast";
 
 export default function SignInPage() {
@@ -22,7 +22,7 @@ export default function SignInPage() {
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: SignInFormData) => {
     setIsLoading(true);
     try {
       const result = await signIn("credentials", {

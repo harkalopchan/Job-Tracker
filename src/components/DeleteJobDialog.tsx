@@ -42,7 +42,7 @@ export function DeleteJobDialog({ job, onClose, onJobDeleted }: DeleteJobDialogP
             Delete Job
           </h3>
           <p className="text-sm text-gray-500 mb-6">
-            Are you sure you want to delete "{job.title}" at {job.company}? This action cannot be undone.
+            Are you sure you want to delete &quot;{job.title}&quot; at {job.company}? This action cannot be undone.
           </p>
           
           <div className="flex justify-end space-x-3">
