@@ -64,7 +64,7 @@ export function JobForm({ job, onClose, onJobCreated, onJobUpdated }: JobFormPro
       } else {
         addToast("Failed to save job", "error");
       }
-    } catch (error) {
+    } catch {
       addToast("An error occurred", "error");
     } finally {
       setIsLoading(false);

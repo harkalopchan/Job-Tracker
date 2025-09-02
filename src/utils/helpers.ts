@@ -1,4 +1,4 @@
-import { Job, Stage, Priority } from "@/types";
+import { Job } from "@/types";
 
 export const stageColors = {
   APPLIED: "bg-blue-100 text-blue-800",

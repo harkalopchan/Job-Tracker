@@ -65,7 +65,7 @@ export function useOptimisticUpdates<T extends { id: string | number }>() {
   );
 
   const optimisticCreate = useCallback(
-    async <K extends keyof T>(
+    async (
       items: T[],
       createFn: (newItem: Partial<T>) => Promise<T>,
       newItemData: Partial<T>,
