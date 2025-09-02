@@ -10,6 +10,7 @@ import { JobList } from "@/components/JobList";
 import { JobForm } from "@/components/forms/JobForm";
 import { SearchAndFilters } from "@/components/SearchAndFilters";
 import { AdminPanel } from "@/components/AdminPanel";
+import { DatabaseError } from "@/components/DatabaseError";
 import { useToast } from "@/hooks/use-toast";
 import { useOptimisticUpdates } from "@/hooks/use-optimistic-updates";
 
@@ -27,6 +28,7 @@ export default function DashboardPage() {
   const [showJobForm, setShowJobForm] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasDatabaseError, setHasDatabaseError] = useState(false);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -64,14 +66,18 @@ export default function DashboardPage() {
 
   const fetchJobs = async () => {
     try {
+      setHasDatabaseError(false);
       const response = await fetch("/api/jobs");
       if (response.ok) {
         const data = await response.json();
         setJobs(data);
         setFilteredJobs(data);
+      } else {
+        setHasDatabaseError(true);
       }
     } catch (error) {
-      addToast("Failed to fetch jobs", "error");
+      console.error("Error fetching jobs:", error);
+      setHasDatabaseError(true);
     } finally {
       setIsLoading(false);
     }
@@ -165,6 +171,10 @@ export default function DashboardPage() {
 
   if (!session) {
     return null;
+  }
+
+  if (hasDatabaseError) {
+    return <DatabaseError onRetry={fetchJobs} />;
   }
 
   return (

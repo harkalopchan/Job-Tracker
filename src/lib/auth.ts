@@ -16,31 +16,55 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
+        // Temporary demo login for testing
+        if (credentials.email === "demo@example.com" && credentials.password === "demo123") {
+          return {
+            id: "demo-user",
+            email: "demo@example.com",
+            name: "Demo User",
+            role: "ADMIN",
+          };
+        }
+
+        try {
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email
+            }
+          });
+
+          if (!user) {
+            return null;
           }
-        });
 
-        if (!user) {
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error("Database connection error:", error);
+          // Fallback to demo login if database is not available
+          if (credentials.email === "demo@example.com" && credentials.password === "demo123") {
+            return {
+              id: "demo-user",
+              email: "demo@example.com",
+              name: "Demo User",
+              role: "ADMIN",
+            };
+          }
           return null;
         }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
       }
     })
   ],
