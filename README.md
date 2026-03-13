@@ -22,7 +22,7 @@ A modern, full-stack job application tracking system built with Next.js 14, Tail
 ### Technical Features
 - **Next.js 14 App Router**: Latest features and performance of Next.js.
 - **TypeScript**: Full type safety throughout the application.
-- **Prisma ORM**: Type-safe database operations using SQLite.
+- **Prisma ORM**: Type-safe database operations using PostgreSQL.
 - **Testing**: Vitest for unit tests and Playwright for end-to-end tests.
 - **Modern UI**: Radix UI components with custom styling.
 
@@ -30,7 +30,7 @@ A modern, full-stack job application tracking system built with Next.js 14, Tail
 
 - **Frontend**: Next.js 14, React 19, TypeScript, TailwindCSS.
 - **Backend**: Next.js API Routes, Prisma ORM.
-- **Database**: SQLite (can easily switch to PostgreSQL).
+- **Database**: PostgreSQL (local or hosted).
 - **Authentication**: NextAuth.js with credentials provider.
 - **Forms**: React Hook Form with Zod validation.
 - **Testing**: Vitest, Testing Library, Playwright.
@@ -63,7 +63,7 @@ cp .env.example .env
 
 Update the `.env` file with your configuration:
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://<user>:<password>@localhost:5432/jobs_tracker?schema=public"
 NEXTAUTH_SECRET="your-secret-key-here"
 NEXTAUTH_URL="http://localhost:3000"
 ```
