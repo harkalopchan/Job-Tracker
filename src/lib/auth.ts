@@ -16,16 +16,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Temporary demo login for testing
-        if (credentials.email === "demo@example.com" && credentials.password === "demo123") {
-          return {
-            id: "demo-user",
-            email: "demo@example.com",
-            name: "Demo User",
-            role: "ADMIN",
-          };
-        }
-
         try {
           const user = await prisma.user.findUnique({
             where: {
@@ -54,15 +44,6 @@ export const authOptions: NextAuthOptions = {
           };
         } catch (error) {
           console.error("Database connection error:", error);
-          // Fallback to demo login if database is not available
-          if (credentials.email === "demo@example.com" && credentials.password === "demo123") {
-            return {
-              id: "demo-user",
-              email: "demo@example.com",
-              name: "Demo User",
-              role: "ADMIN",
-            };
-          }
           return null;
         }
       }
