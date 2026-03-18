@@ -37,7 +37,7 @@ export default function SignInPage() {
         addToast("Signed in successfully", "success");
         router.push("/dashboard");
       }
-    } catch (error) {
+    } catch {
       addToast("An error occurred", "error");
     } finally {
       setIsLoading(false);
